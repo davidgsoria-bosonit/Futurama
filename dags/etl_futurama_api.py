@@ -17,10 +17,17 @@ import hashlib
 import logging
 import os
 
+## Muy bien comentarios de código para organizar el fichero
+## Muy bien separar la función grande en varias funciones
+## Muy bien uso de decoradores para PythonOperator, el código es más limpio. Ten en cuenta que solo sirve para PythonOperator
+## Muy bien control de excepciones
+
 # ============================================================================
 # CONFIGURACIÓN
 # ============================================================================
 
+## Bien usar Variable para ocultar URL, como lo harías usando Connection
+## Si harcodeas por defecto la URL sigue estando en código, lo mejor es no mostrar URLs directamente en el código
 API_URL = Variable.get(
     "futurama_api_url",
     default_var="https://api.sampleapis.com/futurama/characters"
@@ -43,6 +50,7 @@ logger = logging.getLogger(__name__)
 # UTILIDADES
 # ============================================================================
 
+## Función bien definida, que podría pasar si el fichero con el que genera el hash es muy grande?
 def calculate_hash(data: list) -> str:
     """Calcula un hash SHA256 del contenido JSON."""
     serialized = json.dumps(data, sort_keys=True).encode("utf-8")
@@ -52,6 +60,7 @@ def calculate_hash(data: list) -> str:
 # TASKS (TaskFlow API)
 # ============================================================================
 
+## Que cambiarías en esta función para que sea idempotente?
 @task
 def extract_data() -> dict:
     """
@@ -144,6 +153,7 @@ def transform_to_csv(metadata: dict) -> str:
         )
         writer.writeheader()
 
+        ## Está bien hecho pero hay una función que hace que el código se vea más limpio: writer.writerows(...)
         for row in data:
             clean_row = {}
             for field in CSV_FIELDS:
